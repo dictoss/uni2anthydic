@@ -16,15 +16,12 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 import sys
+from emoji_trans_ja import EMOJI_KANA_TRANS_TABLE
 
-EMOJI_KANA_TRANS_TABLE = [
-    # self.cldr_short_name, japanese kana, japanese word type
-    ("watch", "とけい", "#T35"),
-    ("fast-forward button", "やじるし", "#T35"),
-    ("alarm clock", "めざまし", "#T35"),
-    #
-    ("mahjong red dragon", "ちゅん", "#T35")
-]
+# emoji_trans_ja.EMOJI_KANA_TRANS_TABLE INDEX
+EMOJI_KANA_TRANS_INDEX_SHORT_NAME = 0
+EMOJI_KANA_TRANS_INDEX_JA_WORD_TYPE = 1
+EMOJI_KANA_TRANS_INDEX_JA_WORD_KANA = 2
 
 class EmojiCannaDic(object):
     def __init__(self):
@@ -34,8 +31,8 @@ class EmojiCannaDic(object):
         self.cldr_short_name = ""
 
         # cannadic format parameter
-        self.japanese_yomi = japanese_yomi
-        self.japanese_type = japanese_type
+        self.japanese_kana = ""
+        self.japanese_type = ""
         self.emoji = ""
 
         self.codepoints = []
@@ -48,7 +45,7 @@ class EmojiCannaDic(object):
         self.cldr_short_name = ""
 
         # cannadic format parameter
-        self.japanese_yomi = ""
+        self.japanese_kana = ""
         self.japanese_type = ""
         self.emoji = ""
 
@@ -87,14 +84,13 @@ class EmojiCannaDic(object):
             self.codepoints.append(int(self.codepoints_str, 16))
 
     def __str__(self):
-        return "{} {} {}".format(self.japanese_yomi, self.japanese_type, self.emoji)
+        return "{} {} {}".format(self.japanese_kana, self.japanese_type, self.emoji)
 
     def pickup_sequences(self):
         for c in EMOJI_KANA_TRANS_TABLE:
-            if self.cldr_short_name == c[0]:
-                self.japanese_yomi = c[1]
-                self.japanese_type = c[2]
-
+            if self.cldr_short_name == c[EMOJI_KANA_TRANS_INDEX_SHORT_NAME]:
+                self.japanese_type = c[EMOJI_KANA_TRANS_INDEX_JA_WORD_TYPE]
+                self.japanese_kana = c[EMOJI_KANA_TRANS_INDEX_JA_WORD_KANA]
                 return True
 
         return False
@@ -104,7 +100,7 @@ class EmojiCannaDic(object):
             # convert unicode to utf8.
             if 0 < c:
                 _emoji = chr(c)
-                print("{} {} {}".format(self.japanese_yomi, self.japanese_type, _emoji))
+                print("{} {} {}".format(self.japanese_kana, self.japanese_type, _emoji))
 
 
 def main(unicode_file_path):
