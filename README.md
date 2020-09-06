@@ -1,6 +1,6 @@
-# uni2anthydic
+# uni2anthydic package
 
-- unicode emoji convert to anthy dictonary.
+- the package that convert to anthy dictionary format from unicode emoji.
 
 ## purpose
 
